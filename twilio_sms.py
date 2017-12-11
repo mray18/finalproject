@@ -14,12 +14,12 @@ client = Client(ACCOUNT_SID, AUTH_TOKEN)
 # Adding fake data
 print('inserting fake data')
 reservations = [
-    {'phone_number': TO_NUMBER, 'first': 'Fiona', 'last': 'Kim', 'date': '12/10/2017', 'fromTime': '21:00', 'toTime': '22:00', 'room': 'Brush Mountain A' }, # 9PM - 10PM
-    {'phone_number': TO_NUMBER, 'first': 'Fiona', 'last': 'Kim', 'date': '12/10/2017', 'fromTime': '22:00', 'toTime': '22:30', 'room': 'Brush Mountain A' }, # 10PM - 10:30PM
-    {'phone_number': TO_NUMBER, 'first': 'Fiona', 'last': 'Kim', 'date': '12/10/2017', 'fromTime': '22:30', 'toTime': '23:00', 'room': 'Brush Mountain A' }  # 10:30PM - 11PM
+    {'phone_number': TO_NUMBER, 'first': 'Fiona', 'last': 'Kim', 'date': '12/10/2017', 'fromTime': '21:00', 'toTime': '22:00', 'room': 'Brush Mountain A' }, 
+    {'phone_number': TO_NUMBER, 'first': 'Fiona', 'last': 'Kim', 'date': '12/10/2017', 'fromTime': '22:10', 'toTime': '22:30', 'room': 'Brush Mountain A' }, 
+    {'phone_number': TO_NUMBER, 'first': 'Fiona', 'last': 'Kim', 'date': '12/10/2017', 'fromTime': '23:18', 'toTime': '23:59', 'room': 'Brush Mountain A' }
     ]
 
-def sendMessage(name, room):
+def sendMessage(name, room, fromTime, toTime):
     client.messages.create(
     to=TO_NUMBER, 
     from_=TWILIO_NUMBER,
@@ -35,15 +35,19 @@ print (todays_date)
 
 while 1:
     now = datetime.now() + one_hour
-    # Make API call here
+    current_time = datetime.strftime(now, '%H:%M')
+    sent = False
     for reservation in reservations:
-        reservation_time = datetime.strptime('{} {}'.format(reservation['date'], reservation['toTime']), '%m/%d/%Y %H:%M')
-        if reservation_time <= now:
+        reservation_time = reservation['fromTime']
+        if reservation_time == current_time:
             name = reservation['first'] + reservation['last']
             room = reservation['room']
             # Make the times standard 12 HR format
             fromTime = datetime.strptime(reservation['fromTime'], '%H:%M')
-            fromTime = datetime.strftime(fromTime, '%-I:%-M %p')
-            print(fromTime)
-            toTime = reservation['toTime']
-            # sendMessage(name, room, fromTime, toTime)
+            fromTime = datetime.strftime(fromTime, '%-I:%M %p')
+            toTime = datetime.strptime(reservation['toTime'], '%H:%M')
+            toTime = datetime.strftime(toTime, '%-I:%M %p')
+            sendMessage(name, room, fromTime, toTime)
+            sent = True
+    if sent:
+        break
