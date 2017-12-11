@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<script type= "text/javascript" src="datetimepicker_css.js"></script>
+<script type= "text/javascript" src="display.js"></script>
+<script type="text/javascript" src="ng_all.js"></script>
+<script type="text/javascript" src="ng_ui.js"></script>
+<script type="text/javascript" src="timepicker.js"></script>
+
+<header >
+<title>Raspberry Room Reservations</title>
+<link rel=stylesheet type="text/css" href="style.css">
+</header>
+<body>
+<main>
+<h1  style="text-align:center;">Raspberry Room Reservation System </h1>
+<div class="Row">
+	<div class="Column">
+		 <h2>Room Selection</h2> 
+		<form>
+          <p>
+             <label>Building:</label>
+             <select id = "myBuilding">
+               <option value = "1">Squires</option>
+             </select>
+          </p>
+			<p>
+             <label>Room:</label>
+             <select id = "myRoom" >
+               <option value = "1">Jamestown Room</option>
+					<option value = "2">Blue Ridge Conference Room</option>
+             </select>
+          </p>
+          <p>
+				Date :
+				<script type="text/javascript" src="http://www.snaphost.com/jquery/Calendar.aspx"></script> 
+          </p>
+          <p> From:
+					<input type="time" name="myTime" class="time-mm-hh" min="9:00" max="18:00" step="1800" />
+						To:
+				<input type="time" name="myTime2" class="time-mm-hh" />
+				
+				<script type="text/javascript">
+				    $("input[name='myTime']").timeInput(); // use default or html5 attributes
+				    $("input[name='myTime2']").timeInput({min: "6:00", max: "15:00", step: 900}); // 15 min intervals from 6:00 am to 3:00 pm
+				</script>
+			</p>
+         <p>Comments:
+         	<div>
+					<textarea cols="50" rows="5">Please enter your comments here.</textarea>
+				</div>
+         </p>
+    </form>
+	</div>
+	<div class="Column">
+		 <h2>Contact Information</h2>
+		 <form>
+			First name:<br>
+		  <input type="text" name="firstname" >
+		  <br>
+		  Last name:<br>
+		  <input type="text" name="lastname" >
+		  <br>
+		  Phone Number:<br>
+		  <input type="text" name="phoneNumber" value="(xxx)-xxx-xxxx">
+		  <br><br>	 
+		 </form>
+	</div>
+	<div class="Column">
+		<h2 > Room Calendar</h2>
+		<div>
+			<iframe src="https://openclipart.org/image/2400px/svg_to_png/217532/1425663956-outline.png" height="400" width="500"></iframe>		
+		</div>
+	</div>
+</div>
+
+</main>
+
+</body>
+</html>
