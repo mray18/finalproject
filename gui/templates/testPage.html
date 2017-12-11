@@ -27,8 +27,24 @@
 			<p>
              <label>Room:</label>
              <select id = "myRoom" >
+             	<option value = "Blue Ridge Conference Room">Blue Ridge Conference Room</option>
+					<option value = "Brush Mountaitn A">Brush Mountain A</option>
+					<option value = "Brush Mountain B">Brush Mountatin B</option>
+					<option value = "Brush Mountain A&B">Brush Mountain A&B</option>
                <option value = "Jamestown Room">Jamestown Room</option>
-					<option value = "Blue Ridge Conference Room">Blue Ridge Conference Room</option>
+               <option value = "Monterrey Tec Conference Room">Monterrey Tec Conference Room</option>
+					<option value = "Mountain Lake Conference Room">Mountain Lake Conference Room</option>
+					<option value = "Room 116">Room 116</option>
+					<option value = "Room 217">Room 217</option>
+					<option value = "Room 219">Room 219</option>
+             	<option value = "Room 234">Room 234</option>
+             	<option value = "Room 236">Room 236</option>
+        			<option value = "Room 238">Room 238</option>     
+      			<option value = "Room 300">Room 300</option>       
+      			<option value = "Room 342">Room 342</option>
+      			<option value = "Shenandoah Conference Room">Shenandoah Conference Room</option>
+      			<option value = "Williamsburg Room">Williamsburg Room</option>
+      			<option value = "Yorktown Room">Yorktown Room</option>
              </select>
           </p>
           <p >
@@ -48,7 +64,6 @@
 					</script>
 				<label> Date  :</label>
 				<input type="text" name="selected_date" id="datepicker"/>
-
           </p>
           Time:
           <p> From:
@@ -113,7 +128,11 @@
 		alertString +=		"Last Name: "+ lastname + "\n";
 		alertString +=		"Phone Number: "+ phoneNumber + "\n";
 		alertString +=		"Comments: \n"+ comments + "\n";
-		alert(alertString);
+		if (confirm(alertString) == true) {
+        alert("Success! A notification has been sent to the number provided.")
+   		 } else {
+        
+   		}
 }
 </script>
 <div class="Row">
