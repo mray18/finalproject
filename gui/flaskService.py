@@ -6,8 +6,13 @@ import netifaces
 app = Flask(__name__)
 @app.route('/')
 def home():
+   return render_template('index.html')
+@app.route('/createEvent')
+def create():
    return render_template('newEvent.html')
-
+@app.route('/updateEvent')
+def update():
+   return render_template('updateEvent.html')
 ips = netifaces.ifaddresses('wlan0')
 tempList = ips[2]
 var = tempList[0]

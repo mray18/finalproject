@@ -1,0 +1,23 @@
+body{
+background-color: #B0C4DE;
+
+}
+div{
+		padding-top: 50px
+}
+button{
+  margin:auto;
+  display:block;
+}
+
+/* BUTTON STYLES */
+button{
+  padding:16px 32px;
+  font-family:helvetica;
+  font-size:16px;
+  font-weight:100;
+  color:#fff;
+  background: #587286;
+  border:0;
+  font-weight:100;
+}
