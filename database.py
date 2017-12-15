@@ -16,5 +16,6 @@ todays_date = datetime.strftime(now, '%m/%d/%Y')
 reservations.insert([
     {'phone_number': "+17039695397", 'first': 'Fiona', 'last': 'Kim', 'date': todays_date, 'fromTime': '21:00', 'toTime': '22:00', 'room': 'Brush Mountain A'}, 
     {'phone_number': "+17039695397", 'first': 'Fiona', 'last': 'Kim', 'date': todays_date, 'fromTime': '22:10', 'toTime': '22:30', 'room': 'Brush Mountain B' }, 
-    {'phone_number': "+17039695397", 'first': 'Fiona', 'last': 'Kim', 'date': todays_date, 'fromTime': '23:18', 'toTime': '23:59', 'room': 'Brush Mountain A' }
+    {'phone_number': "+17039695397", 'first': 'Fiona', 'last': 'Kim', 'date': todays_date, 'fromTime': '23:18', 'toTime': '23:59', 'room': 'Brush Mountain A' },
+    {'phone_number': "+17039695397", 'first': 'Fiona', 'last': 'Kim', 'date': '12/20/2017', 'fromTime': '23:18', 'toTime': '23:59', 'room': 'Brush Mountain A' }
 ])
