@@ -1,21 +1,21 @@
-#Event Function
+from flask import Flask, request
+
+
+def eventfunc():
     if method == "new"
-        #New Event Function
-    elif method == "edit" or method == "delete"
-        #User Event Function
+        newevent()
+    elif method == "edit"
+        userevents()
+        deleteevent()
+        newevent()
+    elif method == "delete"
+        userevents()
+        deleteevent()
 	
-#New Events
-    #Take in all credentials relevant
-    phone_num = ""
-    first = ""
-    last = ""
-    day = ""
-    from_time = ""
-    to_time = ""
-    room = ""
+def newevent(phone_num, first, last, day, from_time, to_time, room):
     results = db.reservations.find({"date"=day},{"room":room})
     if not results:
-        db.reservations.insert({'phone_number': phone_num 'first': first, 'last': last, 'date': date, 'fromTime': from_time, 'toTime': to_time, 'room': room })
+        db.reservations.insert({'phone_number': phone_num 'first': first, 'last': last, 'date': day, 'fromTime': from_time, 'toTime': to_time, 'room': room })
     for result in results:
         from_time1 = datetime.strptime(result["from_time"], '%H:%M')
         to_time1 = datetime.strptime(result["to_time"], '%H:%M')
@@ -34,14 +34,15 @@
 
         else:
             print('you\'re good')
-            db.reservations.insert({'phone_number': phone_num 'first': first, 'last': last, 'date': date, 'fromTime': from_time, 'toTime': to_time, 'room': room })
+            db.reservations.insert({'phone_number': phone_num 'first': first, 'last': last, 'date': day, 'fromTime': from_time, 'toTime': to_time, 'room': room })
     
-#Check MongoDB for User Events
-    phone_num = ""
+def userevents(phone_num):
     results = db.reservations.find({"phone_number":phone_num})
-    print results
+    return results
+    
+def deleteevent(phone_num, first, last, day, from_time, to_time, room):
+    db.reservations.delete_one({'phone_number': phone_num 'first': first, 'last': last, 'date': day, 'fromTime': from_time, 'toTime': to_time, 'room': room })
         
-#Check MongoDB for Twilio
-    day = ""
+def dailysearch(day):
     results = db.reservations.find({"date": day})
-    print results
+    return results
