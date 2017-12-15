@@ -23,54 +23,34 @@ def sendMessage(name, room, fromTime, toTime):
     client.messages.create(
     to=TO_NUMBER, 
     from_=TWILIO_NUMBER,
-    body='{}, this is a reminder for your room reservation! \n You have reserved {} from {} to {}.'.format(name, room, fromTime, toTime))
+    body='{}, this your room reservation reminder! \n You have reserved {} from {} to {}.'.format(name, room, fromTime, toTime))
 
 one_hour = timedelta(hours=1)
 time_to_send = datetime.strptime('{} {}'.format(reservations[0]['date'], reservations[0]['toTime']), '%m/%d/%Y %H:%M')
-print (time_to_send - one_hour)
 
 now = datetime.now()
 todays_date = datetime.strftime(now, '%m/%d/%Y')
-print (todays_date)
-
-#compare time range
-
-# original time
-# converts string into a date time object that can be compared
-from_time1 = datetime.strptime('12/10/2017 11:30', '%m/%d/%Y %H:%M')
-to_time1 = datetime.strptime('12/10/2017 12:45', '%m/%d/%Y %H:%M')
-
-# time attempting to add
-from_time2 = datetime.strptime('12/10/2017 11:00', '%m/%d/%Y %H:%M')
-to_time2 = datetime.strptime('12/10/2017 12:45', '%m/%d/%Y %H:%M')
-
-# sees if the fromTime is within the range of the original time slot
-if from_time2 >= from_time1 and from_time2 <= to_time1:
-    print('1 time conflict!')
-
-# sees if the toTime is within the range of the original time slot
-elif to_time2 >= from_time1 and to_time2 <= to_time1:
-    print('2 time conflict!')
-
-else:
-    print('you\'re good')
-
-
+print ('todays date: ', todays_date)
+now = datetime.now() + one_hour
 while 1:
+    old_time = datetime.strftime(now, '%H:%M')
     now = datetime.now() + one_hour
     current_time = datetime.strftime(now, '%H:%M')
-    sent = False
-    for reservation in reservations:
-        reservation_time = reservation['fromTime']
-        if reservation_time == current_time:
-            name = reservation['first'] + reservation['last']
-            room = reservation['room']
-            # Make the times standard 12 HR format
-            fromTime = datetime.strptime(reservation['fromTime'], '%H:%M')
-            fromTime = datetime.strftime(fromTime, '%-I:%M %p')
-            toTime = datetime.strptime(reservation['toTime'], '%H:%M')
-            toTime = datetime.strftime(toTime, '%-I:%M %p')
-            sendMessage(name, room, fromTime, toTime)
-            sent = True
-    if sent:
-        break
+    if old_time !=  current_time:
+        print('\none minute passed')
+        current_time = datetime.strftime(now, '%H:%M')
+        sent = False
+        for reservation in reservations:
+            reservation_time = reservation['fromTime']
+            if reservation_time == current_time:
+                name = reservation['first'] + reservation['last']
+                room = reservation['room']
+                # Make the times standard 12 HR format
+                fromTime = datetime.strptime(reservation['fromTime'], '%H:%M')
+                fromTime = datetime.strftime(fromTime, '%-I:%M %p')
+                toTime = datetime.strptime(reservation['toTime'], '%H:%M')
+                toTime = datetime.strftime(toTime, '%-I:%M %p')
+                sendMessage(name, room, fromTime, toTime)
+                sent = True
+        if sent:
+            break
