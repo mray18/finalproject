@@ -1,28 +1,26 @@
 #Event Function
-    -Check Method
-    -Take in all new credentials
-    -Check for New Events:
-	-If no conflicts, success
-	-If conflicts, error
+    if method == "new"
+        #New Event Function
+    elif method == "edit" or method == "delete"
+        #User Event Function
 	
-#Check MongoDB for New Events
--Take in all of the credentials for new event
-    -Check for same day
-    -Check for same room
-    -Check for time
-	-If no conflicts, add event
-	-If conflicts, error
-		
-#Autopopulation of Table
-    -Recieve signal
-    -Pull data from MongoDB
-    -Push to front end
+#New Events
+    #Take in all credentials relevant
+    day = ""
+    room = ""
+    from_time = ""
+    to_time = "" 
+    results = db.reservations.find({"date"=day},{"room":room})
+        #Check for time conflicts
+    #If conflicts, error, else
+    db.reservations.insert({'phone_number': phone_number
     
 #Check MongoDB for User Events
-    -Take in phone number
-    -Check for phone number in MongoDB database
-    -Return all existing events
-    
+    phone_num = ""
+    results = db.reservations.find({"phone_number":phone_num,})
+    print results
+        
 #Check MongoDB for Twilio
-    -Take in a date
-    -Return all existing reservations
+    day = ""
+    results = db.reservations.find("date": day)
+    print results
