@@ -39,7 +39,7 @@ while 1:
     if old_time !=  current_time:
         print('\none minute passed')
         current_time = datetime.strftime(now, '%H:%M')
-        sent = False
+
         for reservation in reservations:
             reservation_time = reservation['fromTime']
             if reservation_time == current_time:
@@ -51,6 +51,3 @@ while 1:
                 toTime = datetime.strptime(reservation['toTime'], '%H:%M')
                 toTime = datetime.strftime(toTime, '%-I:%M %p')
                 sendMessage(name, room, fromTime, toTime)
-                sent = True
-        if sent:
-            break

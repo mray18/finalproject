@@ -1,17 +1,31 @@
 from flask import Flask, request
+import database
 
+app = Flask(__name__)
 
+#Mongo DB Connection
+connection = MongoClient('localhost', 27017)
+db = connection.reservations
+
+@app.route('/reservations', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def eventfunc():
-    if method == "new"
+    method = request.method
+    if method == "POST":
         newevent()
-    elif method == "edit"
+    elif method == "GET":
         userevents()
+    elif method == "PUT":
         deleteevent()
         newevent()
-    elif method == "delete"
-        userevents()
+    elif method == "DELETE":
         deleteevent()
-	
+
+@app.route('/reservations/<path:date>', methods=['GET'])
+def twiliofunc(date):
+    method = request.method
+    if method == "GET":
+        dailysearch(date)
+
 def newevent(phone_num, first, last, day, from_time, to_time, room):
     results = db.reservations.find({"date"=day},{"room":room})
     if not results:
@@ -46,3 +60,6 @@ def deleteevent(phone_num, first, last, day, from_time, to_time, room):
 def dailysearch(day):
     results = db.reservations.find({"date": day})
     return results
+
+if __name__ == '__main__':
+    app.run('0.0.0.0', debug=True)
