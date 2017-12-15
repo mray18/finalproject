@@ -13,11 +13,17 @@ def home(iaddress=address):
     return render_template('index.html', iaddress=iaddress)
 
 @app.route('/createEvent')
-def create():
-   return render_template('newEvent.html')
+def create(iaddress=address):
+   return render_template('newEvent.html', iaddress=iaddress)
 @app.route('/updateEvent')
 def update():
    return render_template('updateEvent.html')
+
+@app.route('/postmethod', methods = ['POST'])
+def get_post_javascript_data():
+    jsdata = request.form['javascript_data']
+    return json.loads(jsdata)[0]
+
 
 
 

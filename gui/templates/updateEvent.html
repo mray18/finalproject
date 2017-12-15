@@ -9,43 +9,72 @@
 <body>
 <main>
 <h1 style="text-align: center; font-family:  "Helvetica", sans-serif;">Raspberry Room Reservation System </h1>
+ // get data here 
 
-<table style="width:100%">
-  <tr>
-    <th>Building</th>
-    <th>Room</th> 
-	<th>Date</th>
-    <th>From</th>
-    <th>To</th>
-    <th>First Name</th>
-    <th>Last Name</th>
-    <th>Number</th>
-    <th>Comments</th>
-  </tr>
-  <tr>
-    <td>Squires</td>
-    <td>Rm 101</td> 
-	 <td>12/21/2017</td>
-	 <td>02:30</td>
-	 <td>03:00</td>
-	 <td>Jill</td>
-	 <td>Smith</td>
-	 <td>(540)-555-5555</td>
-	 <td>Fake Stuff</td>
-	 
-  </tr>
-  <tr>
-    <<td>Squires</td>
-    <td>Rm 202</td> 
-	 <td>12/22/2017</td>
-	 <td>02:30</td>
-	 <td>03:00</td>
-	 <td>Jill</td>
-	 <td>Smith</td>
-	 <td>(540)-555-5555</td>
-	 <td>Fake Stuff</td>
-  </tr>
+<table id="oTable" style="border-style:solid;">
+<tbody id="oTBody0"></tbody>
+
 </table>
+ <script type="text/javascript">
+ window.onload = fnInit();
+
+function fnInit()
+{//<tbody id="oTBody1"></tbody>
+  // Declare variables and create the header, footer, and caption.
+  var oTHead = oTable.createTHead();
+  var oTFoot = oTable.createTFoot();
+  var oCaption = oTable.createCaption();
+  var oRow, oCell;
+  var i, j;
+
+  // Declare stock data that would normally be read in from a stock Web site.
+  var heading = new Array();
+
+  heading[0] = "Stock symbol";
+  heading[1] = "High";
+  heading[2] = "Low";
+  heading[3] = "Close";
+
+  var stock = new Array();
+
+  stock[0] = new Array("ABCD","88.625","85.50","85.81");
+  stock[1] = new Array("EFGH","102.75","97.50","100.063");
+  stock[2] = new Array("IJKL","56.125","54.50","55.688");
+  stock[3] = new Array("MNOP","71.75","69.00","69.00");
+
+  // Insert a row into the header.
+  oRow = oTHead.insertRow(-1);
+  oTHead.setAttribute("bgColor","lightskyblue");
+
+  // Insert cells into the header row.
+  for (i=0; i<heading.length; i++)
+  {
+    oCell = oRow.insertCell(-1);
+    oCell.align = "center";
+    oCell.style.fontWeight = "bold";
+    oCell.innerHTML = heading[i];
+  }
+
+  // Insert rows and cells into bodies.
+  for (i=0; i<stock.length; i++)
+  {
+    var oBody = oTBody0;
+    oRow = oBody.insertRow(-1);
+    for (j=0; j<stock[i].length; j++)
+    {
+      oCell = oRow.insertCell(-1);
+      oCell.innerHTML = stock[i][j];
+    }
+  }
+
+  // Set the background color of the bodies.
+  oTBody0.setAttribute("bgColor","lemonchiffon");
+  //oTBody1.setAttribute("bgColor","goldenrod");
+
+ 
+}
+ </script>
+ 
 
 </body>
 </html>

@@ -129,7 +129,15 @@
 		alertString +=		"Phone Number: "+ phoneNumber + "\n";
 		alertString +=		"Comments: \n"+ comments + "\n";
 		if (confirm(alertString) == true) {
-        alert("Success! A notification has been sent to the number provided.")
+		 var entry = {'phone_number': phoneNumber, 'first': firstName, 'last': lastname, 'date': date, 'fromTime': fromTime, 'toTime': toTime, 'room': room};
+		var jsonasString = JSON.stringify(entry);
+	//include url to post to here
+		//postData(, entry, callback=false);
+		 //"Success! A notification will be sent to the number provided."
+		 var addr = '{{ iaddress }}';
+		var urlweb = 'http://'+addr+':9000/';
+		window.location.href = urlweb;
+       alert( "Success! A notification will be sent to the number provided.");		 
    		 } else {
    		}
 }
