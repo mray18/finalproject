@@ -11,10 +11,26 @@
 <h1 style="text-align: center; font-family:  "Helvetica", sans-serif;">Raspberry Room Reservation System </h1>
 
 <div>
-	<button type="button" onclick="javascript:window.location.href='http://172.29.113.120:9000/createEvent'">Create Reservation</button>	
+	<button type="button" onclick="create_onclick()">Create Reservation</button>	
+	<script type="text/javascript">
+			function create_onclick() 
+			{
+				var addr = '{{ iaddress }}';
+				var urlweb = 'http://'+addr+':9000/createEvent';
+			    window.location.href = urlweb;
+			}
+	</script>
 </div>
 <div>
-	<button type="button" onclick="javascript:window.location.href='http://172.29.113.120:9000/updateEvent'">Update/Delete Reservation</button>	
+	<button type="button" onclick="update_onclick()">Update/Delete Reservation</button>	
+	<script type="text/javascript">
+				function update_onclick() 
+				{
+					var addr = '{{ iaddress }}';
+					var urlweb = 'http://'+addr+':9000/updateEvent';
+				    window.location.href = urlweb;
+				}
+		</script>
 </div>
 <script type="text/javascript" >
 

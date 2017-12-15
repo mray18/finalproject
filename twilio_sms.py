@@ -14,9 +14,9 @@ client = Client(ACCOUNT_SID, AUTH_TOKEN)
 # Adding fake data
 print('inserting fake data')
 reservations = [
-    {'phone_number': TO_NUMBER, 'first': 'Fiona', 'last': 'Kim', 'date': '12/10/2017', 'fromTime': '21:00', 'toTime': '22:00', 'room': 'Brush Mountain A' }, 
-    {'phone_number': TO_NUMBER, 'first': 'Fiona', 'last': 'Kim', 'date': '12/10/2017', 'fromTime': '22:10', 'toTime': '22:30', 'room': 'Brush Mountain A' }, 
-    {'phone_number': TO_NUMBER, 'first': 'Fiona', 'last': 'Kim', 'date': '12/10/2017', 'fromTime': '23:18', 'toTime': '23:59', 'room': 'Brush Mountain A' }
+    {'phone_number': "+17039695397", 'first': 'Fiona', 'last': 'Kim', 'date': '12/10/2017', 'fromTime': '21:00', 'toTime': '22:00', 'room': 'Brush Mountain A'}, 
+    {'phone_number': "+17039695397", 'first': 'Fiona', 'last': 'Kim', 'date': '12/10/2017', 'fromTime': '22:10', 'toTime': '22:30', 'room': 'Brush Mountain A' }, 
+    {'phone_number': "+17039695397", 'first': 'Fiona', 'last': 'Kim', 'date': '12/10/2017', 'fromTime': '23:18', 'toTime': '23:59', 'room': 'Brush Mountain A' }
     ]
 
 def sendMessage(name, room, fromTime, toTime):
@@ -32,6 +32,29 @@ print (time_to_send - one_hour)
 now = datetime.now()
 todays_date = datetime.strftime(now, '%m/%d/%Y')
 print (todays_date)
+
+#compare time range
+
+# original time
+# converts string into a date time object that can be compared
+from_time1 = datetime.strptime('12/10/2017 11:30', '%m/%d/%Y %H:%M')
+to_time1 = datetime.strptime('12/10/2017 12:45', '%m/%d/%Y %H:%M')
+
+# time attempting to add
+from_time2 = datetime.strptime('12/10/2017 11:00', '%m/%d/%Y %H:%M')
+to_time2 = datetime.strptime('12/10/2017 12:45', '%m/%d/%Y %H:%M')
+
+# sees if the fromTime is within the range of the original time slot
+if from_time2 >= from_time1 and from_time2 <= to_time1:
+    print('1 time conflict!')
+
+# sees if the toTime is within the range of the original time slot
+elif to_time2 >= from_time1 and to_time2 <= to_time1:
+    print('2 time conflict!')
+
+else:
+    print('you\'re good')
+
 
 while 1:
     now = datetime.now() + one_hour
