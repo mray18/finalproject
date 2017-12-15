@@ -33,6 +33,29 @@ now = datetime.now()
 todays_date = datetime.strftime(now, '%m/%d/%Y')
 print (todays_date)
 
+#compare time range
+
+# original time
+# converts string into a date time object that can be compared
+from_time1 = datetime.strptime('12/10/2017 11:30', '%m/%d/%Y %H:%M')
+to_time1 = datetime.strptime('12/10/2017 12:45', '%m/%d/%Y %H:%M')
+
+# time attempting to add
+from_time2 = datetime.strptime('12/10/2017 11:00', '%m/%d/%Y %H:%M')
+to_time2 = datetime.strptime('12/10/2017 12:45', '%m/%d/%Y %H:%M')
+
+# sees if the fromTime is within the range of the original time slot
+if from_time2 >= from_time1 and from_time2 <= to_time1:
+    print('1 time conflict!')
+
+# sees if the toTime is within the range of the original time slot
+elif to_time2 >= from_time1 and to_time2 <= to_time1:
+    print('2 time conflict!')
+
+else:
+    print('you\'re good')
+
+
 while 1:
     now = datetime.now() + one_hour
     current_time = datetime.strftime(now, '%H:%M')
