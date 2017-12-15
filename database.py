@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 
 from pymongo import MongoClient
-import time
-import calendar
+from datetime import datetime, timedelta
 
 print('intializing mongo client')
 client = MongoClient() # by default is connected to localhost
