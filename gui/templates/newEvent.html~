@@ -100,8 +100,7 @@
 	<div class="Column">
 		<h2 >Calendar</h2>
 		<div>
-			<iframe src="http://14434396.r.lightningbase-cdn.com/wp-content/uploads/questionmark.png" height="400" width="500"></iframe>		
-		</div>
+			<iframe src="https://calendar.google.com/calendar/b/3/embed?height=600&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=ece4564team14%40gmail.com&amp;color=%231B887A&amp;ctz=America%2FNew_York" style="border-width:0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
 	</div>
 </div>
 <button type="button" onclick="onSubmitClick()">Submit Reservation</button>
