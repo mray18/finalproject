@@ -1,3 +1,4 @@
+from __future__ import print_function
 from flask import Flask, request
 import database
 import json
@@ -38,6 +39,34 @@ def twiliofunc(date):
     if method == "GET":
         return dailysearch(date)
 
+
+#---------------------Google Calendar credentials---------------------
+SCOPES = 'https://www.googleapis.com/auth/calendar'
+CLIENT_SECRET_FILE = 'client_secret.json'
+APPLICATION_NAME = 'Google Calendar API Python'
+
+
+def get_credentials():
+    home_dir = os.path.expanduser('~')
+    credential_dir = os.path.join(home_dir, '.credentials')
+    if not os.path.exists(credential_dir):
+        os.makedirs(credential_dir)
+    credential_path = os.path.join(credential_dir,
+                                   'calendar-python.json')
+
+    store = oauth2client.file.Storage(credential_path)
+    credentials = store.get()
+    if not credentials or credentials.invalid:
+        flow = client.flow_from_clientsecrets(CLIENT_SECRET_FILE, SCOPES)
+        flow.user_agent = APPLICATION_NAME
+        if flags:
+            credentials = tools.run_flow(flow, store, flags)
+        else: # Needed only for compatibility with Python 2.6
+            credentials = tools.run(flow, store)
+        print('Storing credentials to ' + credential_path)
+    return credentials
+#----------------------------------------------------------------------
+
 def newevent(phone_num, first, last, day, from_time, to_time, room):
     results = db.reservations.find({'date':day},{'room':room})
     if not results:
@@ -61,7 +90,32 @@ def newevent(phone_num, first, last, day, from_time, to_time, room):
         else:
             print('you\'re good')
             db.reservations.insert({'phone_number': phone_num, 'first': first, 'last': last, 'date': day, 'fromTime': from_time, 'toTime': to_time, 'room': room })
-    
+			
+            #---------------------Create the event in Google Calendar-------------------------
+            credentials = get_credentials()
+            http = credentials.authorize(httplib2.Http())
+            service = discovery.build('calendar', 'v3', http=http)
+			
+            event = {
+              'summary': 'Raspberry Room Reservation',
+              'location': room,
+              'description': ("Reservation for {}, created by {} {}.").format(room,first,last),
+              'start': {
+                    'dateTime': ("{}T{}").format(day,from_time),
+                    'timeZone': 'EST',
+              },
+              'end': {
+                    'dateTime': ("{}T{}").format(day,to_time),
+                    'timeZone': 'EST',
+              },
+              'attendees': {
+                    'phone': phone_num,
+              },
+            }
+            event = service.events().insert(calendarId='primary', body=event).execute()
+            print ('Event created: %s' % (event.get('htmlLink')))
+	    #----------------------------------------------------------------------------------
+			
 def userevents(phone_num):
     results = db.reservations.find({'phone_number':phone_num})
     return results

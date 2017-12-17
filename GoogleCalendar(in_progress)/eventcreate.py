@@ -50,11 +50,11 @@ def main():
       'location': 'Squires: Room XYZ',
       'description': '<Insert text from "Comments" field on the front-end Raspberry Pi>',
       'start': {
-        'dateTime': '2017-12-13T13:00:00',
+        'dateTime': '2017-12-18T13:00:00',
         'timeZone': 'EST',
       },
       'end': {
-        'dateTime': '2017-12-13T15:00:00',
+        'dateTime': '2017-12-18T15:00:00',
         'timeZone': 'EST',
       },
       'attendees': [
