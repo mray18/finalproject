@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from __future__ import print_function
 from flask import Flask, request
 import database
@@ -77,9 +79,9 @@ def eventfunc():
     to_time = json_obj['toTime']
     room = json_obj['room']
 	
-	#--new--
-	gcal_id = json_obj['gcal_id']
-	#-------
+    #--new--
+    gcal_id = json_obj['gcal_id']
+    #-------
 
     if method == "POST":
         return newevent(phone_num, first, last, day, from_time, to_time, room)
@@ -157,7 +159,7 @@ def newevent(phone_num, first, last, day, from_time, to_time, room):
             print('to_time time conflict!')
 
         else:
-<<<<<<< HEAD
+#<<<<<<< HEAD
             print('no conflict!')
 	    #---------------------Create the event in Google Calendar-------------------------
             credentials = get_credentials()
@@ -181,20 +183,18 @@ def newevent(phone_num, first, last, day, from_time, to_time, room):
               },
             }
             event = service.events().insert(calendarId='primary', body=event).execute()
-            #print ('Event created! Here is your unique Event ID: %s' % (event.get('id')))
-	    calendarid = event.get('id')
-	    print ('You may confirm your event here: %s' % (event.get('htmlLink')))
-	    #----------------------------------------------------------------------------------
-	    
-            entry_id = db.reservations.insert({'phone_number': phone_num, 'first': first, 'last': last, 'date': day, 'fromTime': from_time, 'toTime': to_time, 'room': room , 'gcal_id' = calendarid})
+            calendarid = event.get('id')
+            print ('You may confirm your event here: %s' % (event.get('htmlLink')))
+            #----------------------------------------------------------------------------------
+            entry_id = db.reservations.insert({'phone_number': phone_num, 'first': first, 'last': last, 'date': day, 'fromTime': from_time, 'toTime': to_time, 'room': room , 'gcal_id' : calendarid})
             print('you\'re good')
             return toJSON(db.reservations.find({'_id': ObjectId(entry_id)}))
     error_obj = {'error': 'time conflict found'}
     return json.dumps(error_obj, indent=2)
     
-=======		
+#=======		
 			
->>>>>>> 761aed37b07f70fff2aac6a1716480bfeccae969
+#>>>>>>> 761aed37b07f70fff2aac6a1716480bfeccae969
 def userevents(phone_num):
     results = db.reservations.find({'phone_number':phone_num})
     return toJSON(results)
@@ -242,17 +242,16 @@ def editevent(id, phone_num, first, last, day, from_time, to_time, room, gcal_id
                     'dateTime': ("{}T{}").format(day,from_time),
                     'timeZone': 'EST',
             }
-	    event['end'] = {
+            event['end'] = {
                     'dateTime': ("{}T{}").format(day,to_time),
                     'timeZone': 'EST',
             }
-	    event['attendees'] = {
+            event['attendees'] = {
                     'phone': phone_num,
             }
-			
-	    updated_event = service.events().update(calendarId='primary', eventId=gcal_id, body=event).execute()
-			
-	    print("Your event has been updated!")
+            
+            updated_event = service.events().update(calendarId='primary', eventId=gcal_id, body=event).execute()
+            print("Your event has been updated!")
             print('Please feel free to confirm your changes here: %s' % (event.get('htmlLink')))
 	    #----------------------------------------------------------------------------------
             return toJSON(db.reservations.find({'_id': ObjectId(id)}))
