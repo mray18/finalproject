@@ -2,6 +2,7 @@
 
 from __future__ import print_function
 from flask import Flask, request
+from flask_restful import abort
 import database
 import json
 from bson import json_util
@@ -148,18 +149,22 @@ def newevent(phone_num, first, last, day, from_time, to_time, room):
     start = googleDate(day, from_time)
     end = googleDate(day, to_time)
     time_conflict = False
-    results = db.reservations.find({'date':day}, {'room':room})
+    results = db.reservations.find({'date':day, 'room':room})
     json_results = []
     for result in results:
         json_results.append(result)
     # check is array is empty
     if json_results:
+        results = db.reservations.find({'date':day, 'room':room})
         for result in results:
-            from_time1 = datetime.strptime(result["from_time"], '%H:%M')
-            to_time1 = datetime.strptime(result["to_time"], '%H:%M')
+            from_time1 = datetime.strptime(result["fromTime"], '%H:%M')
+            to_time1 = datetime.strptime(result["toTime"], '%H:%M')
             # time attempting to add
             from_time_obj = datetime.strptime(from_time, '%H:%M')
             to_time_obj = datetime.strptime(to_time, '%H:%M')
+
+            print('comparing the following: {} {} {}'.format(from_time_obj, from_time1, to_time1))
+            print('comparing the following: {} {} {}'.format(to_time_obj, from_time1, to_time1))
             # sees if the fromTime is within the range of the original time slot
             if from_time_obj >= from_time1 and from_time_obj < to_time1:
                 time_conflict = True
@@ -170,8 +175,8 @@ def newevent(phone_num, first, last, day, from_time, to_time, room):
                 print('to_time time conflict!')
 
     if time_conflict:
-        error_obj = {'error': 'time conflict found'}
-        return json.dumps(error_obj, indent=2)
+        error_obj = {'errorMessage': 'time conflict'}
+        return json.dumps(error_obj), 403
     else:
         print('no conflict!')
         calendarid = postToGoogle(room, first, last, start, end, phone_num)
@@ -216,9 +221,10 @@ def editevent(id, phone_num, first, last, day, from_time, to_time, room, gcal_id
     # check is array is empty
     # check is array is empty
     if json_results:
+        results = db.reservations.find({'date':day, 'room':room})
         for result in results:
-            from_time1 = datetime.strptime(result["from_time"], '%H:%M')
-            to_time1 = datetime.strptime(result["to_time"], '%H:%M')
+            from_time1 = datetime.strptime(result["fromTime"], '%H:%M')
+            to_time1 = datetime.strptime(result["toTime"], '%H:%M')
             # time attempting to add
             from_time_obj = datetime.strptime(from_time, '%H:%M')
             to_time_obj = datetime.strptime(to_time, '%H:%M')
@@ -232,8 +238,8 @@ def editevent(id, phone_num, first, last, day, from_time, to_time, room, gcal_id
                 print('to_time time conflict!')
 
     if time_conflict:
-        error_obj = {'error': 'time conflict found'}
-        return json.dumps(error_obj, indent=2)
+        error_obj = {'errorMessage': 'time conflict'}
+        return json.dumps(error_obj), 403
     else:
         print('you\'re good')
         # Edit in Google Calendar
