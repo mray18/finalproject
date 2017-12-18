@@ -5,3 +5,6 @@ background-color: #B0C4DE;
 table{
 border: 1px solid black;
 }
+tr{
+background-color: lightcyan;
+}

@@ -7,9 +7,7 @@ code, to better separate layout from content!
 */
 body{
 background-color: #B0C4DE;
-
 }
-
 h2{
 	text-align: center;
 }
@@ -17,14 +15,14 @@ h2{
 	display: table;
 	table-layout: fixed;
 	 border-spacing: 10px; 
-	 height: 500px
+	 height: 500px;
+	width:80%;	
+	padding: 50px;
 }
-
 .Column{
 	display: table-cell;
 	padding: 50px;
 }
-
 button{
   padding:16px 32px;
   font-family:helvetica;

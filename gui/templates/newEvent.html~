@@ -76,11 +76,6 @@
 				    $("input[name='myTime2']").timeInput(); // 15 min intervals from 6:00 am to 3:00 pm
 				</script>
 			</p>
-         <p>Comments:
-         	<div>
-					<textarea id="comments" cols="50" rows="5">Please enter your comments here.</textarea>
-				</div>
-         </p>
     </form>
 	</div>
 	<div class="Column">
@@ -101,10 +96,10 @@
 		<h2 >Calendar</h2>
 		<div>
 			<iframe src="https://calendar.google.com/calendar/b/3/embed?height=600&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=ece4564team14%40gmail.com&amp;color=%231B887A&amp;ctz=America%2FNew_York" style="border-width:0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+		</div>
 	</div>
 </div>
 <button type="button" onclick="onSubmitClick()">Submit Reservation</button>
-<p>We will send you a text upon successful room reservation.</p>
 <script type="text/javascript">
 	function onSubmitClick() {
 		var building = document.getElementById('myBuilding').value;
@@ -115,7 +110,6 @@
 		var firstName = document.getElementById("firstname").value;
 		var lastname = document.getElementById("lastname").value;
 		var phoneNumber = document.getElementById("phoneNumber").value;
-		var comments = document.getElementById("comments").value;
 		
 		var alertString = "																					Your Reservation Information: \n";
 		alertString +=		"Building: "+ building + "\n";
@@ -126,24 +120,21 @@
 		alertString +=		"First Name: "+ firstName + "\n";
 		alertString +=		"Last Name: "+ lastname + "\n";
 		alertString +=		"Phone Number: "+ phoneNumber + "\n";
-		alertString +=		"Comments: \n"+ comments + "\n";
 		if (confirm(alertString) == true) {
 		 var entry = {'phone_number': phoneNumber, 'first': firstName, 'last': lastname, 'date': date, 'fromTime': fromTime, 'toTime': toTime, 'room': room};
 		var jsonasString = JSON.stringify(entry);
-	//include url to post to here
+	//include url to post to here TODO
 		//postData(, entry, callback=false);
-		 //"Success! A notification will be sent to the number provided."
+
 		 var addr = '{{ iaddress }}';
-		var urlweb = 'http://'+addr+':9000/';
+		 var urlweb = 'http://'+addr+':9000/';
 		window.location.href = urlweb;
        alert( "Success! A notification will be sent to the number provided.");		 
-   		 } else {
-   		}
+   		 } 
 }
 </script>
 <div class="Row">
 </div>
 </main>
-
 </body>
 </html>

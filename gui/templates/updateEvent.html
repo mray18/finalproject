@@ -9,15 +9,14 @@
 <body>
 <main>
 <h1 style="text-align: center; font-family:  "Helvetica", sans-serif;">Raspberry Room Reservation System </h1>
- // get data here 
-
-<table id="oTable" style="border-style:solid;">
+ //  TODO get data here 
+To edit your event click the "Edit" button, type in the field you want to change, then click "Done Editing" and "Submit Changes".
+<table id="oTable" style="border-style:solid;width:100%;">
 <tbody id="oTBody0"></tbody>
 
 </table>
  <script type="text/javascript">
  window.onload = fnInit();
-
 function fnInit()
 {//<tbody id="oTBody1"></tbody>
   // Declare variables and create the header, footer, and caption.
@@ -27,20 +26,26 @@ function fnInit()
   var oRow, oCell;
   var i, j;
 
-  // Declare stock data that would normally be read in from a stock Web site.
   var heading = new Array();
+	
+  heading[0] = "Phone Number";
+  heading[1] = "First Name";
+  heading[2] = "Last Name";
+  heading[3] = "Date";
+  heading[4] = "From:";
+  heading[5] = "To:";
+  heading[6] = "Room";
+  heading[7] = "Edit Event";
+  heading[8] = "Delete Event";
+  heading[9] = "Submit Changes";
 
-  heading[0] = "Stock symbol";
-  heading[1] = "High";
-  heading[2] = "Low";
-  heading[3] = "Close";
-
+//TODO Parse JSON OBJECT and make arrays
   var stock = new Array();
-
-  stock[0] = new Array("ABCD","88.625","85.50","85.81");
-  stock[1] = new Array("EFGH","102.75","97.50","100.063");
-  stock[2] = new Array("IJKL","56.125","54.50","55.688");
-  stock[3] = new Array("MNOP","71.75","69.00","69.00");
+  stock[0] = new Array("+15471234567","Jill","Smith","12/15/2017","02:00","03:30","Room 116");
+  stock[1] = new Array("ABCD","88.625","85.50","85.81","102.75","97.50","100.063");
+  //stock[1] = new Array("EFGH","102.75","97.50","100.063");
+  //stock[2] = new Array("IJKL","56.125","54.50","55.688");
+  //stock[3] = new Array("MNOP","71.75","69.00","69.00");
 
   // Insert a row into the header.
   oRow = oTHead.insertRow(-1);
@@ -54,7 +59,6 @@ function fnInit()
     oCell.style.fontWeight = "bold";
     oCell.innerHTML = heading[i];
   }
-
   // Insert rows and cells into bodies.
   for (i=0; i<stock.length; i++)
   {
@@ -65,16 +69,97 @@ function fnInit()
       oCell = oRow.insertCell(-1);
       oCell.innerHTML = stock[i][j];
     }
+	var cellInstruction = oRow.insertCell(-1);
+    cellInstruction.innerHTML = '<button class="editbtn" type="button">'
+    + '<span class="glyphicon glyphicon-pencil"></span> Edit</button>';
+	var cellInstructionDelete = oRow.insertCell(-1);
+    cellInstructionDelete.innerHTML = '<button class="deletebtn" type="button">'
+    + '<span class="glyphicon glyphicon-pencil"></span> Delete</button>';
+	var cellInstructionSubmit = oRow.insertCell(-1);
+    cellInstructionSubmit.innerHTML = '<button class="submitbtn" type="button">'
+    + '<span class="glyphicon glyphicon-pencil"></span> Submit Changes</button>';
   }
 
-  // Set the background color of the bodies.
-  oTBody0.setAttribute("bgColor","lemonchiffon");
-  //oTBody1.setAttribute("bgColor","goldenrod");
+	oRow.setAttribute("contenteditable", "false");
+	oBody.setAttribute("bgColor", "lightcyan");
 
- 
 }
  </script>
+ <script type="text/javascript">
+$('.editbtn').click(function () {
+    console.log("edit button clicked")
+    var currentTD = $(this).parents('tr').find('td');
+    if ($(this).html() == 'Edit') {
+        currentTD = $(this).parents('tr').find('td');
+        $.each(currentTD, function () {
+            $(this).prop('contenteditable', true)
+        });
+    } else {
+        $.each(currentTD, function () {
+            $(this).prop('contenteditable', false)
+        });
+    }  
+    $(this).html($(this).html() == 'Edit' ? 'Done Editing' : 'Edit')  
+});
  
+$('.submitbtn').click(function () {
+    var arr= new Array(),
+        rowData= [],
+        table= document.getElementById('oTable'),
+        rows= table.getElementsByTagName('tr'),
+        selectedRow,
+        rowCellValue,
+        rowIndex = this.parentNode.parentNode.rowIndex;
+        selectedRow= this.parentNode.parentNode.cells;
 
+        for(j= 0;j<(selectedRow.length - 3) ;j++){
+            rowCellValue= selectedRow[j].textContent ||
+            selectedRow[j].innerText;
+            rowData.push(rowCellValue);
+        }
+        var room = rowData.pop();
+        var toTime = rowData.pop();
+        var fromTime = rowData.pop();
+        var date = rowData.pop();
+        var lastname = rowData.pop();
+        var firstName = rowData.pop();
+        var phoneNumber = rowData.pop();
+        var entry = {'phone_number': phoneNumber, 'first': firstName, 'last': lastname, 'date': date, 'fromTime': fromTime, 'toTime': toTime, 'room': room};
+			var jsonasString = JSON.stringify(entry);
+			//alert(jsonasString)
+// TODO put delete entry  data here
+        
+});  
+$('.deletebtn').click(function () {
+    var arr= new Array(),
+        rowData= [],
+        table= document.getElementById('oTable'),
+        rows= table.getElementsByTagName('tr'),
+        selectedRow,
+        rowCellValue,
+        rowIndex = this.parentNode.parentNode.rowIndex;
+        selectedRow= this.parentNode.parentNode.cells;
+
+        for(j= 0;j<(selectedRow.length - 3) ;j++){
+            rowCellValue= selectedRow[j].textContent ||
+            selectedRow[j].innerText;
+            rowData.push(rowCellValue);
+        }
+
+        var room = rowData.pop();
+        var toTime = rowData.pop();
+        var fromTime = rowData.pop();
+        var date = rowData.pop();
+        var lastname = rowData.pop();
+        var firstName = rowData.pop();
+        var phoneNumber = rowData.pop();
+        var entry = {'phone_number': phoneNumber, 'first': firstName, 'last': lastname, 'date': date, 'fromTime': fromTime, 'toTime': toTime, 'room': room};
+			var jsonasString = JSON.stringify(entry);
+			//alert(jsonasString)
+//put delete entry  data here
+// TODO
+        
+});  
+ </script>
 </body>
 </html>
