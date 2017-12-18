@@ -9,18 +9,19 @@ var = tempList[0]
 address = var['addr']
 
 BACKEND_IP = 'http://' + zeroconfiguration.get_address() + ':5000/reservations'
+backIP = zeroconfiguration.get_address()
 
 app = Flask(__name__)
 @app.route('/')
-def home(iaddress=address):
-    return render_template('index.html', iaddress=iaddress)
+def home(iaddress=address, baddress=backIP):
+    return render_template('index.html', iaddress=iaddress, baddress=baddress)
 
 @app.route('/createEvent')
-def create(iaddress=address):
-   return render_template('newEvent.html', iaddress=iaddress)
+def create(iaddress=address, baddress=backIP):
+   return render_template('newEvent.html', iaddress=iaddress, baddress=baddress)
 @app.route('/updateEvent')
-def update():
-   return render_template('updateEvent.html')
+def update(baddress=backIP, iaddress=address):
+   return render_template('updateEvent.html',baddress=baddress, iaddress=iaddress)
 
 @app.route('/postmethod', methods = ['POST'])
 def get_post_javascript_data():

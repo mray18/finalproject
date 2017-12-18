@@ -9,12 +9,14 @@
 <body>
 <main>
 <h1 style="text-align: center; font-family:  "Helvetica", sans-serif;">Raspberry Room Reservation System </h1>
- //  TODO get data here 
+
 To edit your event click the "Edit" button, type in the field you want to change, then click "Done Editing" and "Submit Changes".
 <table id="oTable" style="border-style:solid;width:100%;">
 <tbody id="oTBody0"></tbody>
 
 </table>
+
+<script src="{{url_for('static', filename='display.js')}}"></script>
  <script type="text/javascript">
  window.onload = fnInit();
 function fnInit()
@@ -38,11 +40,25 @@ function fnInit()
   heading[7] = "Edit Event";
   heading[8] = "Delete Event";
   heading[9] = "Submit Changes";
-
-//TODO Parse JSON OBJECT and make arrays
+  
   var stock = new Array();
-  stock[0] = new Array("+15471234567","Jill","Smith","12/15/2017","02:00","03:30","Room 116");
-  stock[1] = new Array("ABCD","88.625","85.50","85.81","102.75","97.50","100.063");
+	var baddr = 'http://'+'{{ baddress }}'+':5000';
+	var json_array;
+	getData(`${baddr}/reservations/7039695397`, (data)=> {
+		data.foreach( (element) => {
+			console.log(element);
+			stock.push(element);		
+		});
+    }); 
+	//single JSON string of objects
+	console.log("Stock Array: ", stock);
+
+		
+	
+//TODO Parse JSON OBJECT and make arrays
+
+  //stock[0] = new Array("+15471234567","Jill","Smith","12/15/2017","02:00","03:30","Room 116");
+  //stock[1] = new Array("ABCD","88.625","85.50","85.81","102.75","97.50","100.063");
   //stock[1] = new Array("EFGH","102.75","97.50","100.063");
   //stock[2] = new Array("IJKL","56.125","54.50","55.688");
   //stock[3] = new Array("MNOP","71.75","69.00","69.00");
@@ -124,10 +140,12 @@ $('.submitbtn').click(function () {
         var lastname = rowData.pop();
         var firstName = rowData.pop();
         var phoneNumber = rowData.pop();
-        var entry = {'phone_number': phoneNumber, 'first': firstName, 'last': lastname, 'date': date, 'fromTime': fromTime, 'toTime': toTime, 'room': room};
+        var entry = {"phone_number": phoneNumber, "first": firstName, "last": lastname, "date": date, "fromTime": fromTime, "toTime": toTime, "'room": room};
 			var jsonasString = JSON.stringify(entry);
-			alert(jsonasString)
+			//alert(jsonasString)
 // TODO put delete entry  data here
+			var baddr = '{{ baddress }}';
+			//	putData(baddr, entry, callback=false)
         
 });  
 $('.deletebtn').click(function () {
@@ -153,10 +171,14 @@ $('.deletebtn').click(function () {
         var lastname = rowData.pop();
         var firstName = rowData.pop();
         var phoneNumber = rowData.pop();
-        var entry = {'phone_number': phoneNumber, 'first': firstName, 'last': lastname, 'date': date, 'fromTime': fromTime, 'toTime': toTime, 'room': room};
+        var entry = {"phone_number": phoneNumber, "first": firstName, "last": lastname, "date": date, "fromTime": fromTime, "toTime": toTime, "'room": room};
+        
+    
 			var jsonasString = JSON.stringify(entry);
-			alert(jsonasString)
-//put delete entry  data here
+			//alert(jsonasString)
+			//put delete entry  data here
+			var baddr = '{{ baddress }}';
+			//	putData(baddr, entry, callback=false)
 // TODO
         
 });  

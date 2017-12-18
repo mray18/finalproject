@@ -1,36 +1,41 @@
-$(document).ready(function() {
-// Datepicker Popups calender to Choose date.
-$(function() {
-$("#datepicker").datepicker();
-// Pass the user selected date format.
-$("#format").change(function() {
-$("#datepicker").datepicker("option", "dateFormat", $(this).val());
-});
-});
-});
 
 
 function postData(path, entry, callback) {
-		    var httpRequest = new XMLHttpRequest();
-		
-		    httpRequest.open('POST', path);
-		    httpRequest.setRequestHeader('Content-type', 'application/json');
-		
-		    httpRequest.onreadystatechange = function () {
-		        if (httpRequest.readyState === 4 && httpRequest.status === 200) {
-		            var data = JSON.parse(httpRequest.responseText);
-		            if (callback) {
-		                if (data.errorMessage) {
-		                    callback(data.errorMessage);
-		                }
-		                callback(null, data.updated);
-		            }
-		        }
-		    };
-		    console.log("sending: ", entry);
-		    httpRequest.send(entry);
-		}		 
-		
+    console.log('URL', path);
+    var httpRequest = new XMLHttpRequest();
+
+    httpRequest.open('POST', path);
+    httpRequest.setRequestHeader('Content-type', 'application/json');
+
+    httpRequest.onreadystatechange = function () {
+        if (httpRequest.readyState === 4 && httpRequest.status === 200) {
+            var data = JSON.parse(httpRequest.responseText);
+            if (callback) {
+                if (data.errorMessage) {
+                    console.log(data.errorMessage)
+                    callback(data.errorMessage);
+                }
+                callback(null, data.updated);
+            }
+        }
+        else if (httpRequest.status === 403) {
+            var data = JSON.parse(httpRequest.responseText);
+            console.log("data: ", data);
+            data.errorMessage = 'time conflict';
+            if (callback) {
+                if (data.errorMessage) {
+                    console.log(data.errorMessage)
+                    callback(data.errorMessage);
+                }
+                else {
+                    callback(null, data.updated);
+                }
+            }
+        }
+    };
+    console.log("sending: ", entry);
+    httpRequest.send(entry);
+}		 
 		
 function getData(path, callback) {
     var httpRequest = new XMLHttpRequest();
@@ -54,6 +59,43 @@ function putData(path, entry, callback) {
     var httpRequest = new XMLHttpRequest();
 
     httpRequest.open('PUT', path);
+    httpRequest.setRequestHeader('Content-type', 'application/json');
+
+    httpRequest.onreadystatechange = function () {
+        if (httpRequest.readyState === 4 && httpRequest.status === 200) {
+            var data = JSON.parse(httpRequest.responseText);
+            if (callback) {
+                if (data.errorMessage) {
+                    callback(data.errorMessage);
+                }
+                else {
+                    callback(null, data.updated);
+                }
+            }
+        }
+        else if (httpRequest.status === 403) {
+            var data = JSON.parse(httpRequest.responseText);
+            console.log("data: ", data);
+            data.errorMessage = 'time conflict';
+            if (callback) {
+                if (data.errorMessage) {
+                    console.log(data.errorMessage)
+                    callback(data.errorMessage);
+                }
+                else {
+                    callback(null, data.updated);
+                }
+            }
+        }
+    };
+    console.log("sending: ", entry);
+    httpRequest.send(entry);
+}
+
+function deleteData(path, entry, callback) {
+    var httpRequest = new XMLHttpRequest();
+
+    httpRequest.open('DELETE', path);
     httpRequest.setRequestHeader('Content-type', 'application/json');
 
     httpRequest.onreadystatechange = function () {
