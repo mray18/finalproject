@@ -12,9 +12,24 @@ function postData(path, entry, callback) {
             var data = JSON.parse(httpRequest.responseText);
             if (callback) {
                 if (data.errorMessage) {
+                    console.log(data.errorMessage)
                     callback(data.errorMessage);
                 }
                 callback(null, data.updated);
+            }
+        }
+        else if (httpRequest.status === 403) {
+            var data = JSON.parse(httpRequest.responseText);
+            console.log("data: ", data);
+            data.errorMessage = 'time conflict';
+            if (callback) {
+                if (data.errorMessage) {
+                    console.log(data.errorMessage)
+                    callback(data.errorMessage);
+                }
+                else {
+                    callback(null, data.updated);
+                }
             }
         }
     };
@@ -53,7 +68,23 @@ function putData(path, entry, callback) {
                 if (data.errorMessage) {
                     callback(data.errorMessage);
                 }
-                callback(null, data.updated);
+                else {
+                    callback(null, data.updated);
+                }
+            }
+        }
+        else if (httpRequest.status === 403) {
+            var data = JSON.parse(httpRequest.responseText);
+            console.log("data: ", data);
+            data.errorMessage = 'time conflict';
+            if (callback) {
+                if (data.errorMessage) {
+                    console.log(data.errorMessage)
+                    callback(data.errorMessage);
+                }
+                else {
+                    callback(null, data.updated);
+                }
             }
         }
     };

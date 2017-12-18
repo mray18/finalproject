@@ -63,13 +63,13 @@
 							});
 					</script>
 				<label> Date  :</label>
-				<input type="text" name="selected_date" id="datepicker"/>
+				<input type="text" name="selected_date" id="datepicker" required/>
           </p>
           Time (24hr format):
           <p> From:
-					<input id="fromTime"type="time" name="myTime" class="time-mm-hh" step="1800" />
+					<input id="fromTime"type="time" name="myTime" class="time-mm-hh" step="1800" required/>
 						To:
-				<input id="toTime" type="time" name="myTime2" class="time-mm-hh" step="1800"/>
+				<input id="toTime" type="time" name="myTime2" class="time-mm-hh" step="1800" required/>
 				
 				<script type="text/javascript">
 				    $("input[name='myTime']").timeInput(); // 15 min intervals from 6:00 am to 3:00 pm
@@ -85,13 +85,13 @@
 		 <h2>Contact Information</h2>
 		 <form>
 			First name:<br>
-		  <input type="text" id="firstname" placeholder="e.g. John">
+		  <input type="text" id="firstname" placeholder="e.g. John" required>
 		  <br>
 		  Last name:<br>
-		  <input type="text" id="lastname" placeholder="e.g. Smith">
+		  <input type="text" id="lastname" placeholder="e.g. Smith" required>
 		  <br>
 		  Phone Number:<br>
-		  <input type="text" id="phoneNumber" placeholder="+1xxxxxxxxxx">
+		  <input type="text" id="phoneNumber" placeholder="+1xxxxxxxxxx" required>
 		  <br><br>	 
 		 </form>
 	</div>
@@ -113,29 +113,47 @@
 		var firstName = document.getElementById("firstname").value;
 		var lastname = document.getElementById("lastname").value;
 		var phoneNumber = document.getElementById("phoneNumber").value;
-		
-		var alertString = "																					Your Reservation Information: \n";
-		alertString +=		"Building: "+ building + "\n";
-		alertString +=		"Room: "+ room + "\n";
-		alertString +=		"Date: "+ date + "\n";
-		alertString +=		"From: "+ fromTime + "\n";
-		alertString +=		"To: "+ toTime + "\n";
-		alertString +=		"First Name: "+ firstName + "\n";
-		alertString +=		"Last Name: "+ lastname + "\n";
-		alertString +=		"Phone Number: "+ phoneNumber + "\n";
-		if (confirm(alertString) == true) {
-			var json_entry = {"phone_number": phoneNumber, "first": firstName, "last": lastname, "date": date, "fromTime": fromTime, "toTime": toTime, "room": room};
-			var entry = JSON.stringify(json_entry);
-			//include url to post to here TODO
-			var baddr = 'http://'+'{{ baddress }}'+':5000';
-			postData(`${baddr}/reservations`, entry, (data) => {
+		var f = document.getElementsByTagName('form')[0];
+		if (f.checkValidity()) {
+			var alertString = "																					Your Reservation Information: \n";
+			alertString +=		"Building: "+ building + "\n";
+			alertString +=		"Room: "+ room + "\n";
+			alertString +=		"Date: "+ date + "\n";
+			alertString +=		"From: "+ fromTime + "\n";
+			alertString +=		"To: "+ toTime + "\n";
+			alertString +=		"First Name: "+ firstName + "\n";
+			alertString +=		"Last Name: "+ lastname + "\n";
+			alertString +=		"Phone Number: "+ phoneNumber + "\n";
+			if (confirm(alertString) == true) {
+				var json_entry = {"phone_number": phoneNumber, "first": firstName, "last": lastname, "date": date, "fromTime": fromTime, "toTime": toTime, "room": room};
+				var entry = JSON.stringify(json_entry);
+				//include url to post to here TODO
+				var baddr = 'http://'+'{{ baddress }}'+':5000';
+				var alertmessage;
+				console.log('posting data');
+				postData(`${baddr}/reservations`, entry, (err, data) => {
+					if (err) {
+						console.log(err);
+						alertmessage = "Oh no! There seems to be a problem.";
+						alert( alertmessage);
+					}
+					else {
+						console.log('else statement');
+						alertmessage = "Success! A notification will be sent to the number provided."
+						alert( alertmessage);
+						
+					}
+					
+				});	
 				var addr = '{{ iaddress }}';
 				var urlweb = 'http://'+addr+':9000/';
-				window.location.href = urlweb;
-			});
-						
-			alert( "Success! A notification will be sent to the number provided.");		 
-   		} 
+				window.location.href = urlweb; 
+			}											
+		} 
+		else {
+			alert("Fill out all of the fields!");
+		}
+		   
 }
 </script>
 <div class="Row">

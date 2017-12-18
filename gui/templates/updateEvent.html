@@ -139,8 +139,17 @@ $(document).delegate('.submitbtn', 'click', function () {
     console.log(stock);
     console.log(entry);
     // TODO put delete entry  data here
-	var baddr = '{{ baddress }}';
-	putData(`http://${baddr}:5000/reservations`, entry, callback=false);
+    var baddr = '{{ baddress }}';
+	putData(`http://${baddr}:5000/reservations`, entry, (err, data) => {
+        if (err) {
+            console.log(err);
+            alert("Oh no! There seems to be time conflict.");
+        }
+        else {
+            alert("Success! A notification will be sent to the number provided.");
+            
+        }
+    });
         
 });
 
