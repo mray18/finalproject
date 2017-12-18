@@ -65,14 +65,14 @@
 				<label> Date  :</label>
 				<input type="text" name="selected_date" id="datepicker"/>
           </p>
-          Time:
+          Time (24hr format):
           <p> From:
 					<input id="fromTime"type="time" name="myTime" class="time-mm-hh" step="1800" />
 						To:
 				<input id="toTime" type="time" name="myTime2" class="time-mm-hh" step="1800"/>
 				
 				<script type="text/javascript">
-				    $("input[name='myTime']").timeInput(); // use default or html5 attributes
+				    $("input[name='myTime']").timeInput(); // 15 min intervals from 6:00 am to 3:00 pm
 				    $("input[name='myTime2']").timeInput(); // 15 min intervals from 6:00 am to 3:00 pm
 				</script>
 			</p>
@@ -85,13 +85,13 @@
 		 <h2>Contact Information</h2>
 		 <form>
 			First name:<br>
-		  <input type="text" id="firstname" value="e.g. John">
+		  <input type="text" id="firstname" placeholder="e.g. John">
 		  <br>
 		  Last name:<br>
-		  <input type="text" id="lastname" value="e.g. Smith">
+		  <input type="text" id="lastname" placeholder="e.g. Smith">
 		  <br>
 		  Phone Number:<br>
-		  <input type="text" id="phoneNumber" value="+1xxxxxxxxxx">
+		  <input type="text" id="phoneNumber" placeholder="+1xxxxxxxxxx">
 		  <br><br>	 
 		 </form>
 	</div>
@@ -102,7 +102,7 @@
 		</div>
 	</div>
 </div>
-
+<script src="{{url_for('static', filename='display.js')}}"></script>
 <script type="text/javascript">
 	function onSubmitClick() {
 		var building = document.getElementById('myBuilding').value;
@@ -124,16 +124,18 @@
 		alertString +=		"Last Name: "+ lastname + "\n";
 		alertString +=		"Phone Number: "+ phoneNumber + "\n";
 		if (confirm(alertString) == true) {
-		 var entry = {'phone_number': phoneNumber, 'first': firstName, 'last': lastname, 'date': date, 'fromTime': fromTime, 'toTime': toTime, 'room': room};
-		var jsonasString = JSON.stringify(entry);
-	//include url to post to here TODO
-		//postData(, entry, callback=false);
-
-		 var addr = '{{ iaddress }}';
-		 var urlweb = 'http://'+addr+':9000/';
-		window.location.href = urlweb;
-       alert( "Success! A notification will be sent to the number provided.");		 
-   		 } 
+			var json_entry = {"phone_number": phoneNumber, "first": firstName, "last": lastname, "date": date, "fromTime": fromTime, "toTime": toTime, "room": room};
+			var entry = JSON.stringify(json_entry);
+			//include url to post to here TODO
+			var baddr = 'http://'+'{{ baddress }}'+':5000';
+			postData(`${baddr}/reservations`, entry, (data) => {
+				var addr = '{{ iaddress }}';
+				var urlweb = 'http://'+addr+':9000/';
+				window.location.href = urlweb;
+			});
+						
+			alert( "Success! A notification will be sent to the number provided.");		 
+   		} 
 }
 </script>
 <div class="Row">

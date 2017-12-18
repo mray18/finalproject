@@ -9,7 +9,6 @@
 <body>
 <main>
 <h1 style="text-align: center; font-family:  "Helvetica", sans-serif;">Raspberry Room Reservation System </h1>
-
 <div>
 	<button type="button" onclick="create_onclick()">Create Reservation</button>	
 	<script type="text/javascript">

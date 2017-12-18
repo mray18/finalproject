@@ -65,16 +65,19 @@
 				<label> Date  :</label>
 				<input type="text" name="selected_date" id="datepicker"/>
           </p>
-          Time:
+          Time (24hr format):
           <p> From:
 					<input id="fromTime"type="time" name="myTime" class="time-mm-hh" step="1800" />
 						To:
 				<input id="toTime" type="time" name="myTime2" class="time-mm-hh" step="1800"/>
 				
 				<script type="text/javascript">
-				    $("input[name='myTime']").timeInput(); // use default or html5 attributes
+				    $("input[name='myTime']").timeInput(); // 15 min intervals from 6:00 am to 3:00 pm
 				    $("input[name='myTime2']").timeInput(); // 15 min intervals from 6:00 am to 3:00 pm
 				</script>
+			</p>
+			<p>
+				<button type="button" onclick="onSubmitClick()">Submit Reservation</button>			
 			</p>
     </form>
 	</div>
@@ -99,7 +102,7 @@
 		</div>
 	</div>
 </div>
-<button type="button" onclick="onSubmitClick()">Submit Reservation</button>
+
 <script type="text/javascript">
 	function onSubmitClick() {
 		var building = document.getElementById('myBuilding').value;
@@ -124,8 +127,9 @@
 		 var entry = {'phone_number': phoneNumber, 'first': firstName, 'last': lastname, 'date': date, 'fromTime': fromTime, 'toTime': toTime, 'room': room};
 		var jsonasString = JSON.stringify(entry);
 	//include url to post to here TODO
-		//postData(, entry, callback=false);
-
+			var baddr = '{{ baddress }}';
+					//postData(baddr, entry, callback=false);
+					
 		 var addr = '{{ iaddress }}';
 		 var urlweb = 'http://'+addr+':9000/';
 		window.location.href = urlweb;

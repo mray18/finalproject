@@ -9,45 +9,52 @@
 <body>
 <main>
 <h1 style="text-align: center; font-family:  "Helvetica", sans-serif;">Raspberry Room Reservation System </h1>
- //  TODO get data here 
-To edit your event click the "Edit" button, type in the field you want to change, then click "Done Editing" and "Submit Changes".
+
+To edit your event double click the "Edit" button, type in the field you want to change, then click "Done Editing" and "Submit Changes".
 <table id="oTable" style="border-style:solid;width:100%;">
 <tbody id="oTBody0"></tbody>
 
 </table>
- <script type="text/javascript">
- window.onload = fnInit();
-function fnInit()
-{//<tbody id="oTBody1"></tbody>
-  // Declare variables and create the header, footer, and caption.
-  var oTHead = oTable.createTHead();
-  var oTFoot = oTable.createTFoot();
-  var oCaption = oTable.createCaption();
-  var oRow, oCell;
-  var i, j;
 
-  var heading = new Array();
-	
-  heading[0] = "Phone Number";
-  heading[1] = "First Name";
-  heading[2] = "Last Name";
-  heading[3] = "Date";
-  heading[4] = "From:";
-  heading[5] = "To:";
-  heading[6] = "Room";
-  heading[7] = "Edit Event";
-  heading[8] = "Delete Event";
-  heading[9] = "Submit Changes";
+<script src="{{url_for('static', filename='display.js')}}"></script>
+<script type="text/javascript">
+    // global array
+    var stock = [];
+    window.onload = fnInit();
+function fnInit() {
 
-//TODO Parse JSON OBJECT and make arrays
-  var stock = new Array();
-  stock[0] = new Array("+15471234567","Jill","Smith","12/15/2017","02:00","03:30","Room 116");
-  stock[1] = new Array("ABCD","88.625","85.50","85.81","102.75","97.50","100.063");
-  //stock[1] = new Array("EFGH","102.75","97.50","100.063");
-  //stock[2] = new Array("IJKL","56.125","54.50","55.688");
-  //stock[3] = new Array("MNOP","71.75","69.00","69.00");
+    var postNumber = prompt("Please enter the phone number you registered your event with. Example: 5401234567");
+    var entry = {'phone_number': postNumber};
+    // Declare variables and create the header, footer, and caption.
+    var oTHead = oTable.createTHead();
+    var oTFoot = oTable.createTFoot();
+    var oCaption = oTable.createCaption();
+    var oRow, oCell;
+    var i, j;
+
+    var heading = new Array();
+        
+    heading[0] = "Phone Number";
+    heading[1] = "First Name";
+    heading[2] = "Last Name";
+    heading[3] = "Date";
+    heading[4] = "From:";
+    heading[5] = "To:";
+    heading[6] = "Room";
+    heading[7] = "Edit Event";
+    heading[8] = "Delete Event";
+    heading[9] = "Submit Changes";
+    
+    var baddr = '{{ baddress }}';
+
+	getData(`http://${baddr}:5000/reservations/${postNumber}`, (data)=> {
+        data.forEach(function(element) {
+            fillTable(element);		
+        }, this);
+    }); 		
 
   // Insert a row into the header.
+  var oBody = oTBody0;
   oRow = oTHead.insertRow(-1);
   oTHead.setAttribute("bgColor","lightskyblue");
 
@@ -59,35 +66,35 @@ function fnInit()
     oCell.style.fontWeight = "bold";
     oCell.innerHTML = heading[i];
   }
-  // Insert rows and cells into bodies.
-  for (i=0; i<stock.length; i++)
-  {
+  function fillTable(reservation) {
+    var properties = ['phone_number', 'first', 'last', 'date', 'fromTime', 'toTime', 'room'];
     var oBody = oTBody0;
-    oRow = oBody.insertRow(-1);
-    for (j=0; j<stock[i].length; j++)
-    {
-      oCell = oRow.insertCell(-1);
-      oCell.innerHTML = stock[i][j];
+    row = oBody.insertRow(0);
+    for (var index = 0; index < properties.length; index++) {
+        let cell = row.insertCell(index);
+        cell.innerHTML = reservation[properties[index]]
     }
-	var cellInstruction = oRow.insertCell(-1);
+    var cellInstruction = row.insertCell(-1);
     cellInstruction.innerHTML = '<button class="editbtn" type="button">'
-    + '<span class="glyphicon glyphicon-pencil"></span> Edit</button>';
-	var cellInstructionDelete = oRow.insertCell(-1);
+        + '<span class="glyphicon glyphicon-pencil"></span> Edit</button>';
+    var cellInstructionDelete = row.insertCell(-1);
     cellInstructionDelete.innerHTML = '<button class="deletebtn" type="button">'
-    + '<span class="glyphicon glyphicon-pencil"></span> Delete</button>';
-	var cellInstructionSubmit = oRow.insertCell(-1);
+        + '<span class="glyphicon glyphicon-pencil"></span> Delete</button>';
+    var cellInstructionSubmit = row.insertCell(-1);
     cellInstructionSubmit.innerHTML = '<button class="submitbtn" type="button">'
-    + '<span class="glyphicon glyphicon-pencil"></span> Submit Changes</button>';
+        + '<span class="glyphicon glyphicon-pencil"></span> Submit Changes</button>';
+    
+    stock.push(reservation);
+
   }
 
 	oRow.setAttribute("contenteditable", "false");
 	oBody.setAttribute("bgColor", "lightcyan");
 
 }
- </script>
- <script type="text/javascript">
-$('.editbtn').click(function () {
-    console.log("edit button clicked")
+
+$(document).delegate('.editbtn', 'click', function () {
+    console.log("edit button clicked");
     var currentTD = $(this).parents('tr').find('td');
     if ($(this).html() == 'Edit') {
         currentTD = $(this).parents('tr').find('td');
@@ -102,7 +109,8 @@ $('.editbtn').click(function () {
     $(this).html($(this).html() == 'Edit' ? 'Done Editing' : 'Edit')  
 });
  
-$('.submitbtn').click(function () {
+$(document).delegate('.submitbtn', 'click', function () {
+    console.log('submit button clicked');
     var arr= new Array(),
         rowData= [],
         table= document.getElementById('oTable'),
@@ -112,26 +120,33 @@ $('.submitbtn').click(function () {
         rowIndex = this.parentNode.parentNode.rowIndex;
         selectedRow= this.parentNode.parentNode.cells;
 
-        for(j= 0;j<(selectedRow.length - 3) ;j++){
-            rowCellValue= selectedRow[j].textContent ||
-            selectedRow[j].innerText;
-            rowData.push(rowCellValue);
-        }
-        var room = rowData.pop();
-        var toTime = rowData.pop();
-        var fromTime = rowData.pop();
-        var date = rowData.pop();
-        var lastname = rowData.pop();
-        var firstName = rowData.pop();
-        var phoneNumber = rowData.pop();
-        var entry = {'phone_number': phoneNumber, 'first': firstName, 'last': lastname, 'date': date, 'fromTime': fromTime, 'toTime': toTime, 'room': room};
-			var jsonasString = JSON.stringify(entry);
-			//alert(jsonasString)
-// TODO put delete entry  data here
+    for(j= 0;j<(selectedRow.length - 3) ;j++){
+        rowCellValue= selectedRow[j].textContent ||
+        selectedRow[j].innerText;
+        rowData.push(rowCellValue);
+    }
+    var room = rowData.pop();
+    var toTime = rowData.pop();
+    var fromTime = rowData.pop();
+    var date = rowData.pop();
+    var lastname = rowData.pop();
+    var firstName = rowData.pop();
+    var phoneNumber = rowData.pop();
+    var _id = stock[stock.length-rowIndex]['_id'];
+    var gcal_id = stock[stock.length-rowIndex]['gcal_id'];
+    var json_obj = {"phone_number": phoneNumber, "first": firstName, "last": lastname, "date": date, "fromTime": fromTime, "toTime": toTime, "room": room, "_id": _id, "gcal_id": gcal_id};
+    var entry = JSON.stringify(json_obj);
+    console.log(stock);
+    console.log(entry);
+    // TODO put delete entry  data here
+	var baddr = '{{ baddress }}';
+	putData(`http://${baddr}:5000/reservations`, entry, callback=false);
         
-});  
-$('.deletebtn').click(function () {
-    var arr= new Array(),
+});
+
+$(document).delegate('.deletebtn', 'click', function () {
+    console.log('delete button clicked');
+        var arr= new Array(),
         rowData= [],
         table= document.getElementById('oTable'),
         rows= table.getElementsByTagName('tr'),
@@ -153,10 +168,25 @@ $('.deletebtn').click(function () {
         var lastname = rowData.pop();
         var firstName = rowData.pop();
         var phoneNumber = rowData.pop();
-        var entry = {'phone_number': phoneNumber, 'first': firstName, 'last': lastname, 'date': date, 'fromTime': fromTime, 'toTime': toTime, 'room': room};
-			var jsonasString = JSON.stringify(entry);
-			//alert(jsonasString)
-//put delete entry  data here
+        var _id = stock[stock.length-rowIndex]['_id'];
+        var gcal_id = stock[stock.length-rowIndex]['gcal_id'];
+        var json_obj = {"phone_number": phoneNumber, "first": firstName, "last": lastname, "date": date, "fromTime": fromTime, "toTime": toTime, "room": room, "_id": _id, "gcal_id": gcal_id};
+        var entry = JSON.stringify(json_obj);
+
+        //alert(jsonasString)
+        //put delete entry  data here
+        var baddr = '{{ baddress }}';
+        deleteData(`http://${baddr}:5000/reservations`, entry, (err, data) => {
+            if (err) {
+                console.log(err);
+            }
+            else {
+                var addr = '{{ iaddress }}';
+		        var urlweb = 'http://'+addr+':9000/updateEvent';
+		        window.location.href = urlweb;
+            }
+        });
+        
 // TODO
         
 });  
