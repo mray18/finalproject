@@ -228,14 +228,17 @@ def editevent(id, phone_num, first, last, day, from_time, to_time, room, gcal_id
             # time attempting to add
             from_time_obj = datetime.strptime(from_time, '%H:%M')
             to_time_obj = datetime.strptime(to_time, '%H:%M')
-            # sees if the fromTime is within the range of the original time slot
-            if from_time_obj >= from_time1 and from_time_obj < to_time1:
-                time_conflict = True
-                print('from_time time conflict!')
-            # sees if the toTime is within the range of the original time slot
-            elif to_time_obj > from_time1 and to_time_obj<= to_time1:
-                time_conflict = True
-                print('to_time time conflict!')
+            
+            # only compare if it is different people
+            if phone_num != result['phone_number']:
+                # sees if the fromTime is within the range of the original time slot
+                if from_time_obj >= from_time1 and from_time_obj < to_time1:
+                    time_conflict = True
+                    print('from_time time conflict!')
+                # sees if the toTime is within the range of the original time slot
+                elif to_time_obj > from_time1 and to_time_obj<= to_time1:
+                    time_conflict = True
+                    print('to_time time conflict!')
 
     if time_conflict:
         error_obj = {'errorMessage': 'time conflict'}
