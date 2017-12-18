@@ -22,19 +22,20 @@
 	</script>
 </div>
 <div>
-	<button type="button" onclick="javascript:window.location.href='http://172.29.113.120:9000/updateEvent'">Update/Delete Reservation</button>	
+	<button type="button" onclick="update_onclick()">Update/Delete Reservation</button>	
 	<script type="text/javascript">
-				function create_onclick() 
+				function update_onclick() 
 				{
+					var postNumber = prompt("Please enter the phone number you registered your event with. Example: +15401234567");
+					var entry = {'phone_number': postNumber};
+					//post data to back-end here TODO
+					
+					
 					var addr = '{{ iaddress }}';
-					var urlweb = 'http://'+addr+':9000/createEvent';
+					var urlweb = 'http://'+addr+':9000/updateEvent';
 				    window.location.href = urlweb;
 				}
 		</script>
 </div>
-<script type="text/javascript" >
-
-
-</script>
 </body>
 </html>
