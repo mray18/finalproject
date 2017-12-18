@@ -1,14 +1,14 @@
 #/flask/bin/python3
 from flask import *
 import netifaces
-import zero-configuration
+import zeroconfiguration
 
 ips = netifaces.ifaddresses('wlan0')
 tempList = ips[2]
 var = tempList[0]
 address = var['addr']
 
-BACKEND_IP = 'http://' + zero-configuration.get_address() + ':5000/reservations'
+BACKEND_IP = 'http://' + zeroconfiguration.get_address() + ':5000/reservations'
 
 app = Flask(__name__)
 @app.route('/')
